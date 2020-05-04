@@ -160,21 +160,31 @@ function optionChanged() {d3.json('../../samples.json').then((data)=> {
         option.attr('value', id[i]);
         option.html(id[i]);
     };
-    console.log(`The option is ${option}`);
-    console.log(`The option is ${option.attr('value', id[i])}`);
-    console.log(`The option is ${option.text(id[i])}`);
+    
+    // Call updatePlotly() when a change takes place to the DOM
+    d3.selectAll("#selDataset").on("change", updatePlotly);
 
-    //Create the Loop to Go Through Each Row
-    for (i=0; i<names.length; i++) {
-        // Call updatePlotly() when a change takes place to the DOM
-        d3.selectAll("#selDataset").on("change", updatePlotly);
-
-        // This function is called when a dropdown menu item is selected
-        function updatePlotly() {
+    // This function is called when a dropdown menu item is selected
+    function updatePlotly() {
         // Use D3 to select the dropdown menu
         var dropdownMenu = d3.select("#selDataset");
         // Assign the value of the dropdown menu option to a variable
         var dataset = dropdownMenu.property("value");
+
+        //Update the Panel
+        //Remove Existing Values from the Demographic Panel
+        d3.select('.panel-body').selectAll('p').remove()
+        //Create the Loop to Apply the Update Panel Code for All Options
+        for (i=0; i<id.length; i++) {
+            //Push the New Values in the Demographic Panel
+            d3.select('.panel-body').append('p').html(`id: ${id[i]}`);
+            d3.select('.panel-body').append('p').html(`ethnicity: ${ethnicity[i]}`);
+            d3.select('.panel-body').append('p').html(`gender: ${gender[i]}`);
+            d3.select('.panel-body').append('p').html(`age: ${age[i]}`);
+            d3.select('.panel-body').append('p').html(`location: ${location[i]}`);
+            d3.select('.panel-body').append('p').html(`bbtype: ${bbtype[i]}`);
+            d3.select('.panel-body').append('p').html(`wfreq: ${wfreq[i]}`);
+        };
 
         // Initialize x and y arrays
         var x1 = [];
@@ -182,18 +192,26 @@ function optionChanged() {d3.json('../../samples.json').then((data)=> {
         var x2 = [];
         var y2 = [];
 
-        if (dataset === names[i]) {
-            x1 = sample_values_top10[i];
-            y1 = otu_ids_top10[i];
-            x2 = otu_ids[i];
-            y2 = sample_values[i];
-        };
+            //Create the Loop to Go Through Each Row
+        for (i=0; i<names.length; i++) {
+
+            if (dataset === names[i]) {
+                x1 = sample_values_top10[i].reverse();
+                y1 = otu_ids_top10[i].reverse();
+                x2 = otu_ids[i];
+                y2 = sample_values[i];
+                update = {marker: {
+                    size: sample_values[i],
+                    color: otu_ids[i]}
+                };
+            };
 
         // Note the extra brackets around 'x' and 'y'
         Plotly.restyle("bar", "x", [x1]);
         Plotly.restyle("bar", "y", [y1]);
         Plotly.restyle("bubble", "x", [x2]);
         Plotly.restyle("bubble", "y", [y2]);
+        Plotly.restyle("bubble", "update", 1);
         };
     };
 })};
