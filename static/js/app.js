@@ -1,5 +1,5 @@
 // Pull in the Data From samples.json File
-function unpack() {d3.json('../../samples.json').then((data)=> {
+function update() {d3.json('../../samples.json').then((data)=> {
     //Check to Make Sure that the Data Got Ported
     console.log(data)
 
@@ -30,28 +30,6 @@ function unpack() {d3.json('../../samples.json').then((data)=> {
     console.log(`The sample OTU IDs are: ${otu_ids}.`);
     console.log(`The sample OTU labels are: ${otu_labels}.`);
     console.log(`The sample values are: ${sample_values}.`);
-}
-)};
-
-unpack();
-
-
-
-//Create the Initial Charts & Demographic Panel
-function init() {d3.json('../../samples.json').then((data)=> {
-    //Unpack the Values
-    var names = data.names;
-    var age = data.metadata.map(row=>row['age']);
-    var bbtype = data.metadata.map(row=>row['bbtype']);
-    var ethnicity = data.metadata.map(row=>row['ethnicity']);
-    var gender = data.metadata.map(row=>row['gender']);
-    var id = data.metadata.map(row=>row['id']);
-    var location = data.metadata.map(row=>row['location']);
-    var wfreq = data.metadata.map(row=>row['wfreq']);
-    var s_id = data.samples.map(row=>row['id']);
-    var otu_ids = data.samples.map(row=>row['otu_ids']);
-    var otu_labels = data.samples.map(row=>row['otu_labels']);
-    var sample_values = data.samples.map(row=>row['sample_values']);
 
     //Sort the Values by sample_values
     var sorted = data.samples.sort((a, b) => b['sample_values']-a['sample_values']);
@@ -123,36 +101,6 @@ function init() {d3.json('../../samples.json').then((data)=> {
     //Show the Charts
     Plotly.newPlot('bar', data_bar, layout_bar);
     Plotly.newPlot('bubble', data_bubble, layout_bubble)
-}
-)};
-
-init();
-
-function optionChanged() {d3.json('../../samples.json').then((data)=> {
-    //Unpack the Values
-    var names = data.names;
-    var age = data.metadata.map(row=>row['age']);
-    var bbtype = data.metadata.map(row=>row['bbtype']);
-    var ethnicity = data.metadata.map(row=>row['ethnicity']);
-    var gender = data.metadata.map(row=>row['gender']);
-    var id = data.metadata.map(row=>row['id']);
-    var location = data.metadata.map(row=>row['location']);
-    var wfreq = data.metadata.map(row=>row['wfreq']);
-    var s_id = data.samples.map(row=>row['id']);
-    var otu_ids = data.samples.map(row=>row['otu_ids']);
-    var otu_labels = data.samples.map(row=>row['otu_labels']);
-    var sample_values = data.samples.map(row=>row['sample_values']);
-
-    //Sort the Values by sample_values
-    var sorted = data.samples.sort((a, b) => b['sample_values']-a['sample_values']);
-
-    //Return the Slices of Top 10 sample_values and their Corresponding otu_ids
-    var sample_values_top10 = sorted.map(row=>row['sample_values'].slice(0,10));
-    var otu_ids_top10 = sorted.map(row=>row['otu_ids'].slice(0,10).map((element)=>`OTU ${element}`));
-    var otu_ids_top10_1 = sorted.map(row=>row['otu_ids'].slice(0,10));
-    var otu_labels_top10 = sorted.map(row=>row['otu_labels'].slice(0,10));
-    console.log(sample_values_top10);
-    console.log(otu_ids_top10);
 
     //Create the Loop to Append the IDs to the Dropdown Menu
     for (i=0; i<id.length; i++) {
@@ -170,13 +118,13 @@ function optionChanged() {d3.json('../../samples.json').then((data)=> {
         var dropdownMenu = d3.select("#selDataset");
         // Assign the value of the dropdown menu option to a variable
         var dataset = dropdownMenu.property("value");
-        console.log(`The dataset is: ${dataset}.`);
+        
         //Update the Panel
         //Remove Existing Values from the Demographic Panel
         d3.select('.panel-body').selectAll('p').remove()
         //Create the Loop to Apply the Update Panel Code for All Options
         for (i=0; i<id.length; i++) {
-            console.log(id[i]);
+            
             if (dataset === String(id[i])) {
                 console.log(`The chosen id is: ${id[i]}`);
                 //Push the New Values in the Demographic Panel
@@ -218,6 +166,7 @@ function optionChanged() {d3.json('../../samples.json').then((data)=> {
         Plotly.restyle("bubble", "update", 1);
         };
     };
-})};
+}
+)};
 
-optionChanged();
+update();
