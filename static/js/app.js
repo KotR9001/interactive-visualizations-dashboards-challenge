@@ -110,10 +110,10 @@ function update() {d3.json('../../samples.json').then((data)=> {
     };
     
     // Call updatePlotly() when a change takes place to the DOM
-    d3.selectAll("#selDataset").on("change", updatePlotly);
+    d3.selectAll("#selDataset").on("change", optionChanged);
 
     // This function is called when a dropdown menu item is selected
-    function updatePlotly() {
+    function optionChanged() {
         // Use D3 to select the dropdown menu
         var dropdownMenu = d3.select("#selDataset");
         // Assign the value of the dropdown menu option to a variable
