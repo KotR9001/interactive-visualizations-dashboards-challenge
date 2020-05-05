@@ -170,20 +170,24 @@ function optionChanged() {d3.json('../../samples.json').then((data)=> {
         var dropdownMenu = d3.select("#selDataset");
         // Assign the value of the dropdown menu option to a variable
         var dataset = dropdownMenu.property("value");
-
+        console.log(`The dataset is: ${dataset}.`);
         //Update the Panel
         //Remove Existing Values from the Demographic Panel
         d3.select('.panel-body').selectAll('p').remove()
         //Create the Loop to Apply the Update Panel Code for All Options
         for (i=0; i<id.length; i++) {
-            //Push the New Values in the Demographic Panel
-            d3.select('.panel-body').append('p').html(`id: ${id[i]}`);
-            d3.select('.panel-body').append('p').html(`ethnicity: ${ethnicity[i]}`);
-            d3.select('.panel-body').append('p').html(`gender: ${gender[i]}`);
-            d3.select('.panel-body').append('p').html(`age: ${age[i]}`);
-            d3.select('.panel-body').append('p').html(`location: ${location[i]}`);
-            d3.select('.panel-body').append('p').html(`bbtype: ${bbtype[i]}`);
-            d3.select('.panel-body').append('p').html(`wfreq: ${wfreq[i]}`);
+            console.log(id[i]);
+            if (dataset === String(id[i])) {
+                console.log(`The chosen id is: ${id[i]}`);
+                //Push the New Values in the Demographic Panel
+                d3.select('.panel-body').append('p').html(`id: ${id[i]}`);
+                d3.select('.panel-body').append('p').html(`ethnicity: ${ethnicity[i]}`);
+                d3.select('.panel-body').append('p').html(`gender: ${gender[i]}`);
+                d3.select('.panel-body').append('p').html(`age: ${age[i]}`);
+                d3.select('.panel-body').append('p').html(`location: ${location[i]}`);
+                d3.select('.panel-body').append('p').html(`bbtype: ${bbtype[i]}`);
+                d3.select('.panel-body').append('p').html(`wfreq: ${wfreq[i]}`);
+            }
         };
 
         // Initialize x and y arrays
